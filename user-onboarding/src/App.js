@@ -31,6 +31,7 @@ function App() {
   const [formErrors, setFormErrors] = useState(initialErrors); //object
   const [disabled, setDisabled] = useState(initialDisabled); //boolean
 
+  //This axios call is
   // const getUsers = () => {
   //   axios
   //     .get("https://reqres.in/api/users")
@@ -90,7 +91,7 @@ function App() {
     postNewUser(newUser);
   };
 
-  // useEffect(() => {
+  // useEffect(() => { //Thought I need this for when then were changes to the form
   //   getUsers();
   // }, []);
 
