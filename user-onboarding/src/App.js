@@ -82,7 +82,7 @@ function App() {
     const newUser = {
       name: formValues.name.trim(),
       email: formValues.email.trim(),
-      password: formValues.password.trim(),
+      password: formValues.password,
       role: formValues.role.trim(),
       // termsOfService: ["terms"].filter((term) => formValues[term])//used for multiple checkboxes
       termsOfService: formValues.term, //used for only one checkbox? Yes, yes it is.

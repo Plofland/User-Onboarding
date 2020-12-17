@@ -9,6 +9,7 @@ export default yup.object().shape({
   password: yup
     .string()
     .required("Password is required")
+    .matches(/^[a-z]+$/, "Only use letters for the password")
     .min(4, "Password must be at least 4 characters long"),
   role: yup
     .string()
