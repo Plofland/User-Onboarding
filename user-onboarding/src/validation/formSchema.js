@@ -16,5 +16,5 @@ export default yup.object().shape({
       ["student", "ta", "instructor", "alumni"],
       "Please select a Lambda School role",
     ),
-  terms: yup.boolean(),
+  terms: yup.boolean().required("Please check Terms of Service"),
 });

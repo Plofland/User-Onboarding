@@ -6,8 +6,6 @@ import axios from "axios";
 import * as yup from "yup";
 import UsersCard from "./components/UsersCard";
 
-const initialUsers = [];
-
 const initialValues = {
   name: "",
   email: "",
@@ -21,8 +19,10 @@ const initialErrors = {
   email: "",
   password: "",
   role: "",
+  termsOfService: "",
 };
 
+const initialUsers = [];
 const initialDisabled = true;
 
 function App() {
