@@ -10,12 +10,18 @@ export default function Form(props) {
 
   const onChange = (event) => {
     const { name, value, type, checked } = event.target;
-    change(name, value);
+    const valueToUse = type === "checkbox" ? checked : value;
+    change(name, valueToUse);
   };
 
   return (
     <div>
       <form className="formContainer" onSubmit={onSubmit}>
+        <div className="errors">
+          <div>{errors.name}</div>
+          <div>{errors.email}</div>
+          <div>{errors.password}</div>
+        </div>
         <label>
           Name
           <input

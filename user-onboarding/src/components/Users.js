@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
-export default function Users({userDetails}) {
-    return (
-        <div>
-            <h2>{}</h2>
-        </div>
-    )
+export default function Users({ details }) {
+  return (
+    <div className="userCard">
+      <h2>{details.name}</h2>
+      <p>{details.email}</p>
+      <p>{details.role}</p>
+    </div>
+  );
 }

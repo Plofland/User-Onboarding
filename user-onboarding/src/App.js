@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Form from "./components/Form";
-import formScheme from "./validation/formSchema"
-import axios from "axios"
-import * as yup from yup
+import formSchema from "./validation/formSchema";
+import axios from "axios";
+import * as yup from "yup";
+import Users from "./components/Users";
 
 const initialUsers = [];
 
@@ -17,46 +18,44 @@ const initialValues = {
 const initialErrors = {
   name: "",
   email: "",
-  password: ""
+  password: "",
 };
 
 const initialDisabled = true;
 
 function App() {
-  const [user, setUser] = useState(initialUsers);//array of users
-  const [ formValues, setFormValues ] = useState(initialValues);
-  const [ formErrors, setFormErrors ] = useState(initialErrors);
-  const [ disabled, setDisabled ] = useState(initialDisabled);
+  const [user, setUser] = useState(initialUsers); //array of users
+  const [formValues, setFormValues] = useState(initialValues); //object
+  const [formErrors, setFormErrors] = useState(initialErrors); //object
+  const [disabled, setDisabled] = useState(initialDisabled); //boolean
 
   const getUsers = () => {
     axios
-      .get('https://reqres.in/api/users')
+      .get("https://reqres.in/api/users")
       .then((result) => {
         setUser(result.data);
-    })
+      })
       .catch((error) => {
         console.log(error);
         debugger;
-    })
-    
+      });
   };
 
   const postNewUser = (newUser) => {
     axios
-      .post('https://reqres.in/api/users')
-      .then((result) => {
+      .post("https://reqres.in/api/users", newUser)
+      .then((res) => {
         setUser([res.data, ...user]);
         setFormValues(initialValues);
-    })
+      })
       .catch((error) => {
         console.log(error);
-    })
-    
+      });
   };
 
-  const inputChange = ( name, value ) => {
+  const inputChange = (name, value) => {
     yup
-      .reach(schema, name)
+      .reach(formSchema, name)
       .validate(value)
       .then(() => {
         setFormErrors({
@@ -65,13 +64,12 @@ function App() {
         });
       })
       .catch((err) => {
-        // console.log(err)
         setFormErrors({
           ...formErrors,
           [name]: err.errors[0],
-          
         });
       });
+
     setFormValues({
       ...formErrors,
       [name]: value,
@@ -84,39 +82,40 @@ function App() {
       email: formValues.email.trim(),
       password: formValues.password.trim(),
       // termsOfService: ["terms"].filter((term) => formValues[term])//used for multiple checkboxes
-      termsOfService: formValues.term//used for only one checkbox? Yes, yes it is.
+      termsOfService: formValues.term, //used for only one checkbox? Yes, yes it is.
     };
     postNewUser(newUser);
   };
 
-  return;
-  <div>
-    <Form 
-    values={formValues}
-    change={inputChange}
-    submit={formSubmit}
-    disabled={disabled}
-    errors={formErrors}
-    />
-  </div>;
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    formSchema.isValid(formValues).then((valid) => {
+      setDisabled(!valid);
+    });
+  }, [formValues]);
+
+  return (
+    <div>
+      <header>
+        <h2>Lambda School Faculty</h2>
+      </header>
+
+      <Form
+        values={formValues}
+        change={inputChange}
+        submit={formSubmit}
+        disabled={disabled}
+        errors={formErrors}
+      />
+
+      {user.map((user) => {
+        return <Users key={user.id} details={user} />;
+      })}
+    </div>
+  );
 }
 
 export default App;
-
-
-
-
-
-
-let numberStore = [0, 1, 2];
-let newNumber = 12;
-numberStore = [...numberStore, newNumber];
-console.log(numberStore) -->  [0, 1, 2, 12]
-
-numberStore = newNumber;
-console.log(numberStore) --> 12
-
-otherwise:
-numberStore = [numberStore, newNumber];
-console.log(numberStore) -->  [[0, 1, 2] 12]
-

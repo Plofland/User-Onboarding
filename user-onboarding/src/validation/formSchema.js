@@ -1,11 +1,20 @@
-import * as yup from "yup"
+import * as yup from "yup";
 
 export default yup.object().shape({
-    username:yup
-        .string()
-        .required("username is required")
-        .min(2, "username must be at least 3 characters long"),
-    email: yup.string().required("Must be a valid email")
-    role: yup
-    
-})
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(2, "Name must be at least 3 characters long"),
+  email: yup.string().required("Must be a valid email"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(4, "Password must be at least 4 characters long"),
+  role: yup
+    .string()
+    .oneOf(
+      ["student", "ta", "instructor", "alumni"],
+      "Please select a Lambda School role",
+    ),
+  terms: yup.boolean(),
+});
