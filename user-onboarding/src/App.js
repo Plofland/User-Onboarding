@@ -4,7 +4,7 @@ import Form from "./components/Form";
 import formSchema from "./validation/formSchema";
 import axios from "axios";
 import * as yup from "yup";
-import Users from "./components/Users";
+import UsersCard from "./components/UsersCard";
 
 const initialUsers = [];
 
@@ -12,6 +12,7 @@ const initialValues = {
   name: "",
   email: "",
   password: "",
+  role: "",
   termsOfService: false,
 };
 
@@ -19,6 +20,7 @@ const initialErrors = {
   name: "",
   email: "",
   password: "",
+  role: "",
 };
 
 const initialDisabled = true;
@@ -29,17 +31,17 @@ function App() {
   const [formErrors, setFormErrors] = useState(initialErrors); //object
   const [disabled, setDisabled] = useState(initialDisabled); //boolean
 
-  const getUsers = () => {
-    axios
-      .get("https://reqres.in/api/users")
-      .then((result) => {
-        setUser(result.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        debugger;
-      });
-  };
+  // const getUsers = () => {
+  //   axios
+  //     .get("https://reqres.in/api/users")
+  //     .then((result) => {
+  //       setUser(result.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       debugger;
+  //     });
+  // };
 
   const postNewUser = (newUser) => {
     axios
@@ -71,7 +73,7 @@ function App() {
       });
 
     setFormValues({
-      ...formErrors,
+      ...formValues,
       [name]: value,
     });
   };
@@ -81,15 +83,16 @@ function App() {
       name: formValues.name.trim(),
       email: formValues.email.trim(),
       password: formValues.password.trim(),
+      role: formValues.role.trim(),
       // termsOfService: ["terms"].filter((term) => formValues[term])//used for multiple checkboxes
       termsOfService: formValues.term, //used for only one checkbox? Yes, yes it is.
     };
     postNewUser(newUser);
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  // useEffect(() => {
+  //   getUsers();
+  // }, []);
 
   useEffect(() => {
     formSchema.isValid(formValues).then((valid) => {
@@ -111,9 +114,10 @@ function App() {
         errors={formErrors}
       />
 
-      {user.map((user) => {
-        return <Users key={user.id} details={user} />;
-      })}
+      {user &&
+        user.map((person) => {
+          return <UsersCard key={person.id} details={person} />;
+        })}
     </div>
   );
 }
